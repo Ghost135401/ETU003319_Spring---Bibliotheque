@@ -1,0 +1,11 @@
+app\App.class
+app\Controllers\HomeController.class
+app\Service\CategorieProduitService.class
+app\Models\BaseObject.class
+app\Controllers\ProduitController.class
+app\Controllers\CategorieProduitController.class
+app\Models\CategorieProduit.class
+app\Service\ProduitService.class
+app\Repository\CategorieProduitRepository.class
+app\Repository\ProduitRepository.class
+app\Models\Produit.class
