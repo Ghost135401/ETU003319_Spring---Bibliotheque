@@ -141,6 +141,14 @@ public void removeAuteur(Auteur auteur) {
 )
 private List<Auteur> auteurs;
 
+public List<Auteur> getAuteurs() {
+    return auteurs;
+}
+
+public void setAuteurs(List<Auteur> auteurs) {
+    this.auteurs = auteurs;
+}
+
 // Ajoutez ces méthodes
 public String getNomsAuteurs() {
     if (auteurs == null || auteurs.isEmpty()) {
@@ -157,6 +165,75 @@ public String getPremierAuteur() {
     }
     Auteur a = auteurs.get(0);
     return a.getPrenom() + " " + a.getNom();
+}
+
+public Boolean estDisponible(List<Exemplaire> exemplaires,List<Pret> prets){
+    Boolean t=false;
+    for (int i = 0; i < exemplaires.size(); i++) {
+        if(this.id==exemplaires.get(i).getLivre().getId()){
+            if(exemplaires.get(i).estDisponibleDate(prets)){
+                t=true;
+                break;
+            }
+        }
+        
+    }
+    return t;
+}
+public static List<Livre> livredisponible(List<Livre> liv,List<Exemplaire> exemplaires,List<Pret> prets){
+    List<Livre> livre=new ArrayList<Livre>();
+    for (int i = 0; i < exemplaires.size(); i++) {
+        for (int j = 0; j < liv.size(); j++) {
+            if(liv.get(j).getId()==exemplaires.get(i).getLivre().getId()){
+            if(exemplaires.get(i).estDisponibleDate(prets)){
+               Livre resultat=liv.get(j);
+               if(!livre.contains(resultat)){
+                   livre.add(resultat);
+
+               }
+            }
+        }
+        }
+    
+        
+    }
+
+    return livre;
+}
+public Exemplaire getDispoExemplaire(List<Exemplaire> exemplaires,List<Pret> prets){
+    Exemplaire result=null;
+     for (int j = 0; j < exemplaires.size(); j++) {
+            if(this.getId()==exemplaires.get(j).getLivre().getId()){
+            if(exemplaires.get(j).estDisponibleDate(prets)){
+               result=exemplaires.get(j);
+               break;
+            }
+        }
+    }
+    return result;
+}
+
+public List<Exemplaire> getDispoExemplaireList(List<Exemplaire> exemplaires,List<Pret> prets){
+    List<Exemplaire> result=new ArrayList<Exemplaire>();
+     for (int j = 0; j < exemplaires.size(); j++) {
+            if(this.getId()==exemplaires.get(j).getLivre().getId()){
+            if(exemplaires.get(j).estDisponibleDate(prets)){
+                Exemplaire tmp=exemplaires.get(j);
+                result.add(tmp);
+            }
+        }
+    }
+    return result;
+}
+public List<Exemplaire> getExemplaireList(List<Exemplaire> exemplaires,List<Pret> prets){
+    List<Exemplaire> result=new ArrayList<Exemplaire>();
+     for (int j = 0; j < exemplaires.size(); j++) {
+            if(this.getId()==exemplaires.get(j).getLivre().getId()){
+                Exemplaire tmp=exemplaires.get(j);
+                result.add(tmp);
+        }
+    }
+    return result;
 }
 
 }

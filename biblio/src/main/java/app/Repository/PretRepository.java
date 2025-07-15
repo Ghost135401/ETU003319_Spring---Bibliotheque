@@ -1,5 +1,6 @@
 package app.Repository;
 
+import app.Models.Adherent;
 import app.Models.Pret;
 import app.Models.StatutPret;
 
@@ -20,7 +21,17 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     
     @Query("SELECT p FROM Pret p WHERE p.dateRetourPrevue < ?1 AND p.dateRetourEffective IS NULL")
     List<Pret> findLateReturns(LocalDate currentDate);
+    // Trouver les prêts en cours (non retournés)
+    List<Pret> findByDateRetourEffectiveIsNullOrderByDateRetourPrevueAsc();
     
+    // Trouver l'historique des prêts (retournés)
+    List<Pret> findByDateRetourEffectiveIsNotNullOrderByDateRetourEffectiveDesc();
+    
+    // Recherche dans l'historique
+    @Query("SELECT p FROM Pret p WHERE " +
+           "(p.adherent.nom LIKE %:query% OR p.adherent.prenom LIKE %:query% OR " +
+           "p.exemplaire.livre.titre LIKE %:query%) AND p.dateRetourEffective IS NOT NULL")
+    List<Pret> searchHistorique(@Param("query") String query);
     List<Pret> findByDateEmpruntBetween(LocalDate startDate, LocalDate endDate);
     List<Pret> findByDateRetourEffectiveBetween(LocalDate startDate, LocalDate endDate);
    
@@ -34,5 +45,8 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
                "LEFT JOIN FETCH l.auteurs a " +
                "WHERE p.adherent.id = :adherentId AND p.dateRetourEffective IS NULL")
         List<Pret> findByAdherentWithDetails(@Param("adherentId") Integer adherentId);
+
+ @Query(value = "SELECT * FROM prets WHERE date_retour_effective IS NOT NULL AND adherent_id = :adherentId", nativeQuery = true)
+List<Pret> getHistorique(int adherentId);
 
 }

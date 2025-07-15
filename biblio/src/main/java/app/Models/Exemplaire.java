@@ -1,7 +1,10 @@
 package app.Models;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "exemplaires")
@@ -31,6 +34,21 @@ public class Exemplaire {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Boolean estDisponibleDate(List<Pret> prets){
+        Boolean t=true;
+        for (int i = 0; i < prets.size(); i++) {
+            if(prets.get(i).getExemplaire().getId()==this.getId() && prets.get(i).getStatut().getId()==1){
+                LocalDate maintenant=LocalDate.now();
+                LocalDate avant=prets.get(i).getDateEmprunt();
+                LocalDate apres=prets.get(i).getDateRetourPrevue();
+                if((maintenant.isAfter(avant) || maintenant.equals(avant)) && (maintenant.isBefore(apres) || maintenant.equals(apres))){
+                    t=false;
+                }
+            }
+        }
+        return t;
+    }
 
     public Exemplaire() {}
 
@@ -69,4 +87,9 @@ public class Exemplaire {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+
+
+    @OneToMany(mappedBy = "exemplaire")
+    private List<Reservation> reservations;
 }
