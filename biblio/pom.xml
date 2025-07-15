@@ -15,9 +15,9 @@
         <spring.version>6.1.2</spring.version>
         <hibernate.version>6.4.1.Final</hibernate.version>
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
-        <mysql.version>8.0.33</mysql.version>
         <spring.data.jpa.version>3.2.2</spring.data.jpa.version>
         <querydsl.version>5.0.0</querydsl.version>
+        <postgresql.version>42.7.3</postgresql.version>
     </properties>
 
     <dependencies>
@@ -47,11 +47,11 @@
             <version>${spring.data.jpa.version}</version>
         </dependency>
 
-        <!-- Database -->
+        <!-- PostgreSQL -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <!-- Hibernate -->
@@ -82,6 +82,19 @@
             <version>${jakarta.servlet.version}</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- JSP Support -->
         <dependency>
@@ -89,6 +102,21 @@
             <artifactId>jakarta.servlet.jsp-api</artifactId>
             <version>3.1.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.15.2</version>
         </dependency>
 
         <!-- JSTL Support -->
@@ -142,12 +170,12 @@
                     </webApp>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <httpConnector>
-                        <port>8080</port>
+                        <port>9090</port>
                     </httpConnector>
                 </configuration>
             </plugin>
             
-            <!-- Exec Plugin (si nécessaire) -->
+            <!-- Exec Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
