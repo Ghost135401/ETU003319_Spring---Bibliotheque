@@ -3,6 +3,8 @@ package app.Models;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.List;
 
 @Entity
 @Table(name = "adherents")
@@ -35,6 +37,39 @@ public class Adherent {
     @ManyToOne
     @JoinColumn(name = "statut_id")
     private Statut statut;
+
+    public int getAge(){
+        return Period.between(date_naissance, LocalDate.now()).getYears();
+    }
+
+    public int nombrePret(List<Pret> pret){
+        int result=0;
+        for (int i = 0; i < pret.size(); i++) {
+            if(this.id==pret.get(i).getAdherent().getId()){
+                if(pret.get(i).getStatut().getId()==1){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
+    public Boolean estPenalise(List<Penalite> penalites){
+        Boolean t=false;
+         for (int i = 0; i < penalites.size(); i++) {
+            if(penalites.get(i).getAdherent().getId()==this.getId() && penalites.get(i).getStatut().equals("ACTIVE")){
+                LocalDate maintenant=LocalDate.now();
+                LocalDate avant=penalites.get(i).getDateApplication();
+                LocalDate apres=penalites.get(i).getDateLevee();
+                if((maintenant.isAfter(avant) || maintenant.equals(avant)) && (maintenant.isBefore(apres) || maintenant.equals(apres))){
+                    t=true;
+                }
+            }
+        }
+        return t;
+    }
+
+
 
     public Adherent() {}
 
@@ -89,4 +124,6 @@ public class Adherent {
 
     public Statut getStatut() { return statut; }
     public void setStatut(Statut statut) { this.statut = statut; }
+    @OneToMany(mappedBy = "adherent")
+    private List<Reservation> reservations;
 } 
